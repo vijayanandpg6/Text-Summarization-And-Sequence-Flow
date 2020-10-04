@@ -70,6 +70,44 @@ namespace WebApp.Controllers
 
             return View(listContent);
         }
-        
+
+
+        private List<SentenceStructure> BindToModelList(string strJSONResult)
+        {
+            var result = JObject.Parse(strJSONResult);
+            var listContent = new List<SentenceStructure>();
+            if (result["values"].ToString() != "")
+            {
+                for (var i = 0; i < result["values"].ToArray().Length; i++)
+                {
+                    var text = result["values"][i]["text"].ToString().Split(' ');
+
+
+                    listContent.Add(new SentenceStructure()
+                    {
+                        Sentence = result["values"][i]["text"].ToString(),
+                    });
+                    listContent[i].TextStructureParis = new List<TextStructure>();
+                    var prePOSForm = "";
+                    
+                }
+            }
+            return listContent;
+        }
+
+        private string GetPOSTaggedData()
+        {
+            string content = "";
+            var fileStream = new FileStream(outputPOSTaggedJSON, FileMode.Open, FileAccess.Read);
+
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+            {
+                content = streamReader.ReadToEnd();
+            }
+
+            return content;
+        }
+
+
     }
 }
