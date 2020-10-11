@@ -71,7 +71,6 @@ namespace WebApp.Controllers
             return View(listContent);
         }
 
-
         private List<SentenceStructure> BindToModelList(string strJSONResult)
         {
             var result = JObject.Parse(strJSONResult);
@@ -89,7 +88,31 @@ namespace WebApp.Controllers
                     });
                     listContent[i].TextStructureParis = new List<TextStructure>();
                     var prePOSForm = "";
-                    
+                    for (var j = 0; j < text.Length; j++)
+                    {
+                        var key = text[j];
+                        var value = result["values"][i][key] == null ? "" : result["values"][i][key].ToString();
+                        if (value != "")
+                        {
+                            var POSForm = "";
+                            if (value.Substring(0, 1) == "N") { POSForm = "noun"; }
+                            else if (value.Substring(0, 1) == "V") { POSForm = "verb"; }
+                            else { POSForm = value; }
+                            if (prePOSForm == POSForm)
+                            {
+                                listContent[i].TextStructureParis[listContent[i].TextStructureParis.Count - 1].TextKey += " " + key;
+                            }
+                            else
+                            {
+                                listContent[i].TextStructureParis.Add(new TextStructure()
+                                {
+                                    TextKey = key,
+                                    TextValue = POSForm
+                                });
+                            }
+                            prePOSForm = POSForm;
+                        }
+                    }
                 }
             }
             return listContent;
@@ -108,6 +131,25 @@ namespace WebApp.Controllers
             return content;
         }
 
+        private void ProcessTagData()
+        {
+            // 1) Create Process info
+            string error = "", results = "";
+            var psi = new ProcessStartInfo();
+            psi.FileName = pythonExePath;
+
+            // 2) Provide script and arguments
+            psi.Arguments = outputPOSTaggedScriptFile;
+            
+            // 4)Execute process and get output
+            using (var process = Process.Start(psi))
+            {
+                //error = process.StandardError.ReadToEnd();
+                //results = process.StandardOutput.ReadToEnd();
+            }
+
+            //System.IO.File.WriteAllText(outputPOSTaggedJSON, results);
+        }
 
     }
 }
