@@ -172,5 +172,38 @@ namespace WebApp.Controllers
             return summarizedtext;
         }
 
+
+        private string ReadFromFile(string filePath)
+        {
+            string text = "";
+            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+            {
+                text = streamReader.ReadToEnd();
+            }
+
+            return text;
+        }
+
+        private void ProcessSummarizeText(string filePath)
+        {
+            var psi = new ProcessStartInfo();
+            psi.FileName = pythonExePath;
+            string error = "", results = "";
+
+            psi.Arguments = testSummarizeFile;
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = false;
+            psi.RedirectStandardOutput = true;
+            psi.RedirectStandardError = true;
+
+            using (var process = Process.Start(psi))
+            {
+                error = process.StandardError.ReadToEnd();
+                results = process.StandardOutput.ReadToEnd();
+            }
+        }
+
     }
 }
