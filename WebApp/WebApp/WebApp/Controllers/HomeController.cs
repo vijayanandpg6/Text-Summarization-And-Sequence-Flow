@@ -140,7 +140,13 @@ namespace WebApp.Controllers
 
             // 2) Provide script and arguments
             psi.Arguments = outputPOSTaggedScriptFile;
-            
+
+            // 3)Process configuration
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = false;
+            psi.RedirectStandardOutput = true;
+            psi.RedirectStandardError = true;
+
             // 4)Execute process and get output
             using (var process = Process.Start(psi))
             {
@@ -149,6 +155,21 @@ namespace WebApp.Controllers
             }
 
             //System.IO.File.WriteAllText(outputPOSTaggedJSON, results);
+        }
+
+
+        private string GetSummarizedText()
+        {
+            string summarizedtext = "";
+            var filePath = outputSummarizeFilePath;
+            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+            {
+                summarizedtext = streamReader.ReadToEnd();
+            }
+
+            return summarizedtext;
         }
 
     }
