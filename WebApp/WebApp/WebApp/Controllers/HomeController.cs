@@ -205,5 +205,25 @@ namespace WebApp.Controllers
             }
         }
 
+        private void ProcessSummarizeTextByNLTK(string filePath)
+        {
+            var psi = new ProcessStartInfo();
+            psi.FileName = pythonExePath;
+            string error = "", results = "";
+
+            psi.Arguments = testSummarizeFileNLTK;
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = false;
+            psi.RedirectStandardOutput = true;
+            psi.RedirectStandardError = true;
+
+            using (var process = Process.Start(psi))
+            {
+                error = process.StandardError.ReadToEnd();
+                results = process.StandardOutput.ReadToEnd();
+            }
+        }
+
+
     }
 }
