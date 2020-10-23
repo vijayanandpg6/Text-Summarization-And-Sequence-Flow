@@ -38,35 +38,39 @@ namespace WebApp.Controllers
         {
             string posTaggedData = "", summarizedText = "", mainInputText = "", mainInputLinkText = "";
             var filePath = inputSummarizeFilePath;
-            if(inputTxt.InputUploadValue != null && inputTxt.InputUploadValue != string.Empty){
-                
+            if (inputTxt.InputUploadValue != null && inputTxt.InputUploadValue != string.Empty)
+            {
+                mainInputText = ReadFromFile(uploadFilePath + inputTxt.InputUploadValue);
             }
-            else if(inputTxt.InputTextValue != null && inputTxt.InputTextValue != string.Empty)
+            else if (inputTxt.InputTextValue != null && inputTxt.InputTextValue != string.Empty)
             {
                 mainInputText = inputTxt.InputTextValue;
             }
-            else if(inputTxt.InputLinkValue != null && inputTxt.InputLinkValue != string.Empty)
+            else if (inputTxt.InputLinkValue != null && inputTxt.InputLinkValue != string.Empty)
             {
                 mainInputLinkText = inputTxt.InputLinkValue;
             }
 
-            
+            WriteTextToFile(filePath, mainInputText);
 
-            if(inputTxt.InputLinkValue != null && inputTxt.InputLinkValue != string.Empty)
+            if (inputTxt.InputLinkValue != null && inputTxt.InputLinkValue != string.Empty)
             {
-            
+                ProcessSummarizeLinkTextByNLTK(filePath, mainInputLinkText);
             }
             else
             {
-            
+                ProcessSummarizeTextByNLTK(filePath);
             }
 
-            //summarizedText = GetSummarizedText();
+            summarizedText = GetSummarizedText();
 
-            //ProcessTagData();
+            ProcessTagData();
 
             Thread.Sleep(5000);
-            
+
+            posTaggedData = GetPOSTaggedData();
+
+            var listContent = BindToModelList(posTaggedData);
 
             return View(listContent);
         }
@@ -157,7 +161,6 @@ namespace WebApp.Controllers
             //System.IO.File.WriteAllText(outputPOSTaggedJSON, results);
         }
 
-
         private string GetSummarizedText()
         {
             string summarizedtext = "";
@@ -171,7 +174,6 @@ namespace WebApp.Controllers
 
             return summarizedtext;
         }
-
 
         private string ReadFromFile(string filePath)
         {
@@ -224,6 +226,34 @@ namespace WebApp.Controllers
             }
         }
 
+        private void ProcessSummarizeLinkTextByNLTK(string filePath, string link)
+        {
+            var psi = new ProcessStartInfo();
+            psi.FileName = pythonExePath;
+            string error = "", results = "";
 
+            psi.Arguments = testSummarizeLinkFileNLTK + " " + link;
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = false;
+            psi.RedirectStandardOutput = true;
+            psi.RedirectStandardError = true;
+
+            using (var process = Process.Start(psi))
+            {
+                //error = process.StandardError.ReadToEnd();
+                //results = process.StandardOutput.ReadToEnd();
+            }
+        }
+
+        private void WriteTextToFile(string filePath, string strVal)
+        {
+            System.IO.File.WriteAllText(filePath, strVal);
+        }
+
+        public ActionResult Demo()
+        {
+            var test = new List<SentenceStructure>();
+            return View(test);
+        }
     }
 }
