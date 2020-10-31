@@ -45,3 +45,41 @@
             </div>
         </div>
     </section>
+    <section id="section3">
+        <div class="container jumbo">
+            <div class="jumbotron" style="padding-bottom: 150px;padding-top: 150px;background-color: #94c6f6;">
+                <br /><br />
+                @using (Html.BeginForm("WSDDisplay", "Home", FormMethod.Post))
+                {
+                    <div class="rowTextInput">
+                        <span>
+                            <input class="basic-slide" id="InputTextValue" name="InputTextValue" type="text" placeholder="Type or paste content" /><label for="name">Text</label>
+                        </span>
+                        <br /><br /><button class="btn btn-warning" type="submit" id="submitBtn">Submit</button>
+                    </div>
+                }
+                @*@Html.TextAreaFor(model => model.InputTxtValue)*@<br />
+
+
+            </div>
+        </div>
+    </section>
+    <section id="section4">
+        <div class="container jumbo">
+            <div class="jumbotron" style="padding-bottom: 150px;padding-top: 150px;background-color: #b3ddc0;">
+                <br /><br />
+                @using (Html.BeginForm("WSDDisplay", "Home", FormMethod.Post))
+                {
+                    <div class="rowTextInput">
+                        <span>
+                            <input class="basic-slide" name="InputLinkValue" id="InputLinkValue" type="text" placeholder="Copy and paste your article link" /><label for="name">Paste Link</label>
+                        </span>
+                        <br /><br /><button class="btn btn-warning" type="submit" id="submitBtn">Submit</button>
+                    </div>
+                    @*@Html.TextAreaFor(model => model.InputTxtValue)*@<br />
+
+                }
+            </div>
+        </div>
+    </section>
+</div>
