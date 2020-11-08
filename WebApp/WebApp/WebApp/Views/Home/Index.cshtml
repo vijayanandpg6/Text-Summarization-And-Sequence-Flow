@@ -82,4 +82,32 @@
             </div>
         </div>
     </section>
+    <section id="section5">
+        <div class="container jumbo">
+            <div class="jumbotron" style="padding-bottom: 150px;padding-top: 150px; background-color: #eaa0a3;">
+                <br /><br />
+                @using (Html.BeginForm("WSDDisplay", "Home", FormMethod.Post))
+                {
+                    <div class="rowTextInput">
+                        @*<span>
+                                <input class="basic-slide" id="InputAudioValue" type="text" placeholder="Record Audio" /><label for="name">Record</label>
+                            </span>*@
+                        <div id="recordingLogo" style="display:none">
+                            <img src="~/Images/recording_gif.gif" alt="Recording" style="border-radius: 50%;" />
+                        </div>
+                        @*<audio controls autoplay></audio>*@
+                        <script type="text/javascript" src="recorder.js"></script>
+                        <fieldset>
+                            <legend>RECORD AUDIO</legend>
+                            <input class="btn btn-primary" onclick="startRecording()" type="button" value="Record" />
+                            <input class="btn btn-danger" onclick="stopRecording()" type="button" value="Stop" />
+                        </fieldset>
+                        <br /><br /><button class="btn btn-warning" type="submit" id="submitBtn">Submit</button>
+                    </div>
+                    @*@Html.TextAreaFor(model => model.InputTxtValue)*@<br />
+
+                }
+            </div>
+        </div>
+    </section>
 </div>
