@@ -17,6 +17,49 @@
     <br /><br /><br />
 </div>
 
+@*<button class="collapsible">Ive been searching for the right words to that.</button>
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div><br />*@
+
+<div>
+    <span class="tag-wrap">
+        <span class="tag">
+            { } Sequence Flows
+        </span>
+    </span>
+    <br /><br /><br />
+</div>
+
+<button class="collapsible" style="background-color: #7d64b2">Diagram</button>
+
+<div class="content">
+    <br />
+    @foreach (var item in Model)
+    {
+        foreach (var pair in item.TextStructureParis)
+        {
+            if (pair.TextValue == "noun")
+            {
+                <span class="spnNounBG">@pair.TextKey</span>
+            }
+            else if (pair.TextValue == "verb")
+            {
+                <span class="imgArrow"><img src="~/Images/black-arrow.jpg" style="width: 87px;height: 40px;" /></span>
+                <span class="spnVerbBG" style="font-size:small">@pair.TextKey</span>
+            }
+            else
+            {
+                @*<span style="font-size:small">@pair.TextKey</span>*@
+            }
+
+            @*<span id="spnValue">@pair.TextKey</span>
+                <span>---------></span>
+                <span id="spnValue">@pair.TextValue</span><hr />*@
+        }<br />
+    }<br />
+</div><br />
+
 <script>
     var coll = document.getElementsByClassName("collapsible");
     var i;
