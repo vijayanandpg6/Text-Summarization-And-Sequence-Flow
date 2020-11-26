@@ -28,6 +28,48 @@ data = pd.read_csv(TESTDATA,sep=";",lineterminator='-',names=['body_text','label
 #data = pd.read_csv('M10033.tsv', sep=',',lineterminator='-', names=['body_text'])
 print(data.head())
 
+#removing punctuation to process text
+def remove_punct(text):
+    text_nopunct = "".join([x for x in text if x not in string.punctuation])
+    return text_nopunct
+
+data['body_text_clean'] = data['body_text'].apply(lambda x: remove_punct(x))
+
+#print(data.head()) 
+
+#tokenization
+
+def tokenize(text):
+    tokens = re.split('\W+', text)
+    return tokens
+#print("\n")
+#print("\n")
+data['body_text_tokenized'] = data['body_text_clean'].apply(lambda x:tokenize(x.lower()))
+#print(data.head())
+
+# # Remove stopwords
+stopword = nltk.corpus.stopwords.words('english')
+#print(stopword)
+
+
+result=[]
+lst=[]
+from nltk import word_tokenize
+for index,row in data.iterrows():
+    result.append(row['body_text_clean'])
+    wordToken=word_tokenize(row['body_text_clean'])
+    lst.append(nltk.pos_tag(wordToken))
+
+resultstr='{ "values" :['
+i=0
+datalength=len(data.index)
+for index,row in data.iterrows():
+    resultstr=resultstr+"{ 'text' :"+'"'+result[i]+'"'+" , "
+    tempstr=str(lst[i]).replace(",",":").replace("): (",",").replace("[(","").replace(")]","")
+    resultstr=resultstr+tempstr+"}";
+    if i!=(datalength-1):
+        resultstr=resultstr+",";
+    i=i+1
 
 resultstr=resultstr+"]}"   
 temp1= str(resultstr).replace("'", '"')
