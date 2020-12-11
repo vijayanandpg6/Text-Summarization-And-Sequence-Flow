@@ -51,6 +51,27 @@ data['body_text_tokenized'] = data['body_text_clean'].apply(lambda x:tokenize(x.
 stopword = nltk.corpus.stopwords.words('english')
 #print(stopword)
 
+#Function to remove stopwords
+def remove_stopwords(tokenized_list):
+    text =[word for word in tokenized_list if word not in stopword]
+    return text
+#print("\n")
+#print("\n")
+data['body_text_nostop'] = data['body_text_tokenized'].apply(lambda x: remove_stopwords(x))
+#print(data.head())
+
+
+#  Lemmatizer
+wn = nltk.WordNetLemmatizer()
+
+def lemmatizing(tokenized_text):
+    text =[wn.lemmatize(word) for word in tokenized_text]
+    return text
+data['body_text_lemmatized'] = data['body_text_nostop'].apply(lambda x: lemmatizing(x))
+#print("\n")
+#print("\n")
+#print(data.head())
+
 
 result=[]
 lst=[]
